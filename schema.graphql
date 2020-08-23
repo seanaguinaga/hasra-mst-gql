@@ -1,0 +1,972 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+# expression to compare columns of type Boolean. All fields are combined with logical 'AND'.
+input Boolean_comparison_exp {
+  _eq: Boolean
+  _gt: Boolean
+  _gte: Boolean
+  _in: [Boolean!]
+  _is_null: Boolean
+  _lt: Boolean
+  _lte: Boolean
+  _neq: Boolean
+  _nin: [Boolean!]
+}
+
+scalar json
+
+# expression to compare columns of type json. All fields are combined with logical 'AND'.
+input json_comparison_exp {
+  _eq: json
+  _gt: json
+  _gte: json
+  _in: [json!]
+  _is_null: Boolean
+  _lt: json
+  _lte: json
+  _neq: json
+  _nin: [json!]
+}
+
+# mutation root
+type mutation_root {
+  # perform the action: "actionName"
+  actionName(arg1: SampleInput!): SampleOutput
+
+  # delete data from the table: "online_users"
+  delete_online_users(
+    # filter the rows which have to be deleted
+    where: online_users_bool_exp!
+  ): online_users_mutation_response
+
+  # delete data from the table: "todos"
+  delete_todos(
+    # filter the rows which have to be deleted
+    where: todos_bool_exp!
+  ): todos_mutation_response
+
+  # delete single row from the table: "todos"
+  delete_todos_by_pk(id: uuid!): todos
+
+  # delete data from the table: "users"
+  delete_users(
+    # filter the rows which have to be deleted
+    where: users_bool_exp!
+  ): users_mutation_response
+
+  # delete single row from the table: "users"
+  delete_users_by_pk(id: uuid!): users
+
+  # insert data into the table: "online_users"
+  insert_online_users(
+    # the rows to be inserted
+    objects: [online_users_insert_input!]!
+  ): online_users_mutation_response
+
+  # insert a single row into the table: "online_users"
+  insert_online_users_one(
+    # the row to be inserted
+    object: online_users_insert_input!
+  ): online_users
+
+  # insert data into the table: "todos"
+  insert_todos(
+    # the rows to be inserted
+    objects: [todos_insert_input!]!
+
+    # on conflict condition
+    on_conflict: todos_on_conflict
+  ): todos_mutation_response
+
+  # insert a single row into the table: "todos"
+  insert_todos_one(
+    # the row to be inserted
+    object: todos_insert_input!
+
+    # on conflict condition
+    on_conflict: todos_on_conflict
+  ): todos
+
+  # insert data into the table: "users"
+  insert_users(
+    # the rows to be inserted
+    objects: [users_insert_input!]!
+
+    # on conflict condition
+    on_conflict: users_on_conflict
+  ): users_mutation_response
+
+  # insert a single row into the table: "users"
+  insert_users_one(
+    # the row to be inserted
+    object: users_insert_input!
+
+    # on conflict condition
+    on_conflict: users_on_conflict
+  ): users
+
+  # update data of the table: "online_users"
+  update_online_users(
+    # sets the columns of the filtered rows to the given values
+    _set: online_users_set_input
+
+    # filter the rows which have to be updated
+    where: online_users_bool_exp!
+  ): online_users_mutation_response
+
+  # update data of the table: "todos"
+  update_todos(
+    # sets the columns of the filtered rows to the given values
+    _set: todos_set_input
+
+    # filter the rows which have to be updated
+    where: todos_bool_exp!
+  ): todos_mutation_response
+
+  # update single row of the table: "todos"
+  update_todos_by_pk(
+    # sets the columns of the filtered rows to the given values
+    _set: todos_set_input
+    pk_columns: todos_pk_columns_input!
+  ): todos
+
+  # update data of the table: "users"
+  update_users(
+    # sets the columns of the filtered rows to the given values
+    _set: users_set_input
+
+    # filter the rows which have to be updated
+    where: users_bool_exp!
+  ): users_mutation_response
+
+  # update single row of the table: "users"
+  update_users_by_pk(
+    # sets the columns of the filtered rows to the given values
+    _set: users_set_input
+    pk_columns: users_pk_columns_input!
+  ): users
+}
+
+# columns and relationships of "online_users"
+type online_users {
+  id: uuid
+  last_seen: timestamptz
+
+  # An object relationship
+  user: users
+}
+
+# aggregated selection of "online_users"
+type online_users_aggregate {
+  aggregate: online_users_aggregate_fields
+  nodes: [online_users!]!
+}
+
+# aggregate fields of "online_users"
+type online_users_aggregate_fields {
+  count(columns: [online_users_select_column!], distinct: Boolean): Int
+  max: online_users_max_fields
+  min: online_users_min_fields
+}
+
+# order by aggregate values of table "online_users"
+input online_users_aggregate_order_by {
+  count: order_by
+  max: online_users_max_order_by
+  min: online_users_min_order_by
+}
+
+# input type for inserting array relation for remote table "online_users"
+input online_users_arr_rel_insert_input {
+  data: [online_users_insert_input!]!
+}
+
+# Boolean expression to filter rows from the table "online_users". All fields are combined with a logical 'AND'.
+input online_users_bool_exp {
+  _and: [online_users_bool_exp]
+  _not: online_users_bool_exp
+  _or: [online_users_bool_exp]
+  id: uuid_comparison_exp
+  last_seen: timestamptz_comparison_exp
+  user: users_bool_exp
+}
+
+# input type for inserting data into table "online_users"
+input online_users_insert_input {
+  id: uuid
+  last_seen: timestamptz
+  user: users_obj_rel_insert_input
+}
+
+# aggregate max on columns
+type online_users_max_fields {
+  id: uuid
+  last_seen: timestamptz
+}
+
+# order by max() on columns of table "online_users"
+input online_users_max_order_by {
+  id: order_by
+  last_seen: order_by
+}
+
+# aggregate min on columns
+type online_users_min_fields {
+  id: uuid
+  last_seen: timestamptz
+}
+
+# order by min() on columns of table "online_users"
+input online_users_min_order_by {
+  id: order_by
+  last_seen: order_by
+}
+
+# response of any mutation on the table "online_users"
+type online_users_mutation_response {
+  # number of affected rows by the mutation
+  affected_rows: Int!
+
+  # data of the affected rows by the mutation
+  returning: [online_users!]!
+}
+
+# input type for inserting object relation for remote table "online_users"
+input online_users_obj_rel_insert_input {
+  data: online_users_insert_input!
+}
+
+# ordering options when selecting data from "online_users"
+input online_users_order_by {
+  id: order_by
+  last_seen: order_by
+  user: users_order_by
+}
+
+# select columns of table "online_users"
+enum online_users_select_column {
+  # column name
+  id
+
+  # column name
+  last_seen
+}
+
+# input type for updating data in table "online_users"
+input online_users_set_input {
+  id: uuid
+  last_seen: timestamptz
+}
+
+# column ordering options
+enum order_by {
+  # in the ascending order, nulls last
+  asc
+
+  # in the ascending order, nulls first
+  asc_nulls_first
+
+  # in the ascending order, nulls last
+  asc_nulls_last
+
+  # in the descending order, nulls first
+  desc
+
+  # in the descending order, nulls first
+  desc_nulls_first
+
+  # in the descending order, nulls last
+  desc_nulls_last
+}
+
+# query root
+type query_root {
+  # fetch data from the table: "online_users"
+  online_users(
+    # distinct select on columns
+    distinct_on: [online_users_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [online_users_order_by!]
+
+    # filter the rows returned
+    where: online_users_bool_exp
+  ): [online_users!]!
+
+  # fetch aggregated fields from the table: "online_users"
+  online_users_aggregate(
+    # distinct select on columns
+    distinct_on: [online_users_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [online_users_order_by!]
+
+    # filter the rows returned
+    where: online_users_bool_exp
+  ): online_users_aggregate!
+
+  # fetch data from the table: "todos"
+  todos(
+    # distinct select on columns
+    distinct_on: [todos_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [todos_order_by!]
+
+    # filter the rows returned
+    where: todos_bool_exp
+  ): [todos!]!
+
+  # fetch aggregated fields from the table: "todos"
+  todos_aggregate(
+    # distinct select on columns
+    distinct_on: [todos_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [todos_order_by!]
+
+    # filter the rows returned
+    where: todos_bool_exp
+  ): todos_aggregate!
+
+  # fetch data from the table: "todos" using primary key columns
+  todos_by_pk(id: uuid!): todos
+
+  # fetch data from the table: "users"
+  users(
+    # distinct select on columns
+    distinct_on: [users_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [users_order_by!]
+
+    # filter the rows returned
+    where: users_bool_exp
+  ): [users!]!
+
+  # fetch aggregated fields from the table: "users"
+  users_aggregate(
+    # distinct select on columns
+    distinct_on: [users_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [users_order_by!]
+
+    # filter the rows returned
+    where: users_bool_exp
+  ): users_aggregate!
+
+  # fetch data from the table: "users" using primary key columns
+  users_by_pk(id: uuid!): users
+}
+
+input SampleInput {
+  password: String!
+  username: String!
+}
+
+type SampleOutput {
+  accessToken: String!
+}
+
+# expression to compare columns of type String. All fields are combined with logical 'AND'.
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+# subscription root
+type subscription_root {
+  # fetch data from the table: "online_users"
+  online_users(
+    # distinct select on columns
+    distinct_on: [online_users_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [online_users_order_by!]
+
+    # filter the rows returned
+    where: online_users_bool_exp
+  ): [online_users!]!
+
+  # fetch aggregated fields from the table: "online_users"
+  online_users_aggregate(
+    # distinct select on columns
+    distinct_on: [online_users_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [online_users_order_by!]
+
+    # filter the rows returned
+    where: online_users_bool_exp
+  ): online_users_aggregate!
+
+  # fetch data from the table: "todos"
+  todos(
+    # distinct select on columns
+    distinct_on: [todos_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [todos_order_by!]
+
+    # filter the rows returned
+    where: todos_bool_exp
+  ): [todos!]!
+
+  # fetch aggregated fields from the table: "todos"
+  todos_aggregate(
+    # distinct select on columns
+    distinct_on: [todos_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [todos_order_by!]
+
+    # filter the rows returned
+    where: todos_bool_exp
+  ): todos_aggregate!
+
+  # fetch data from the table: "todos" using primary key columns
+  todos_by_pk(id: uuid!): todos
+
+  # fetch data from the table: "users"
+  users(
+    # distinct select on columns
+    distinct_on: [users_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [users_order_by!]
+
+    # filter the rows returned
+    where: users_bool_exp
+  ): [users!]!
+
+  # fetch aggregated fields from the table: "users"
+  users_aggregate(
+    # distinct select on columns
+    distinct_on: [users_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [users_order_by!]
+
+    # filter the rows returned
+    where: users_bool_exp
+  ): users_aggregate!
+
+  # fetch data from the table: "users" using primary key columns
+  users_by_pk(id: uuid!): users
+}
+
+scalar timestamptz
+
+# expression to compare columns of type timestamptz. All fields are combined with logical 'AND'.
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}
+
+# columns and relationships of "todos"
+type todos {
+  created_at: timestamptz
+  id: uuid!
+  is_completed: Boolean
+  is_public: Boolean
+
+  # An object relationship
+  owner: users
+  owner_id: uuid
+  title: String
+}
+
+# aggregated selection of "todos"
+type todos_aggregate {
+  aggregate: todos_aggregate_fields
+  nodes: [todos!]!
+}
+
+# aggregate fields of "todos"
+type todos_aggregate_fields {
+  count(columns: [todos_select_column!], distinct: Boolean): Int
+  max: todos_max_fields
+  min: todos_min_fields
+}
+
+# order by aggregate values of table "todos"
+input todos_aggregate_order_by {
+  count: order_by
+  max: todos_max_order_by
+  min: todos_min_order_by
+}
+
+# input type for inserting array relation for remote table "todos"
+input todos_arr_rel_insert_input {
+  data: [todos_insert_input!]!
+  on_conflict: todos_on_conflict
+}
+
+# Boolean expression to filter rows from the table "todos". All fields are combined with a logical 'AND'.
+input todos_bool_exp {
+  _and: [todos_bool_exp]
+  _not: todos_bool_exp
+  _or: [todos_bool_exp]
+  created_at: timestamptz_comparison_exp
+  id: uuid_comparison_exp
+  is_completed: Boolean_comparison_exp
+  is_public: Boolean_comparison_exp
+  owner: users_bool_exp
+  owner_id: uuid_comparison_exp
+  title: String_comparison_exp
+}
+
+# unique or primary key constraints on table "todos"
+enum todos_constraint {
+  # unique or primary key constraint
+  todoes_pkey
+}
+
+# input type for inserting data into table "todos"
+input todos_insert_input {
+  created_at: timestamptz
+  id: uuid
+  is_completed: Boolean
+  is_public: Boolean
+  owner: users_obj_rel_insert_input
+  owner_id: uuid
+  title: String
+}
+
+# aggregate max on columns
+type todos_max_fields {
+  created_at: timestamptz
+  id: uuid
+  owner_id: uuid
+  title: String
+}
+
+# order by max() on columns of table "todos"
+input todos_max_order_by {
+  created_at: order_by
+  id: order_by
+  owner_id: order_by
+  title: order_by
+}
+
+# aggregate min on columns
+type todos_min_fields {
+  created_at: timestamptz
+  id: uuid
+  owner_id: uuid
+  title: String
+}
+
+# order by min() on columns of table "todos"
+input todos_min_order_by {
+  created_at: order_by
+  id: order_by
+  owner_id: order_by
+  title: order_by
+}
+
+# response of any mutation on the table "todos"
+type todos_mutation_response {
+  # number of affected rows by the mutation
+  affected_rows: Int!
+
+  # data of the affected rows by the mutation
+  returning: [todos!]!
+}
+
+# input type for inserting object relation for remote table "todos"
+input todos_obj_rel_insert_input {
+  data: todos_insert_input!
+  on_conflict: todos_on_conflict
+}
+
+# on conflict condition type for table "todos"
+input todos_on_conflict {
+  constraint: todos_constraint!
+  update_columns: [todos_update_column!]!
+  where: todos_bool_exp
+}
+
+# ordering options when selecting data from "todos"
+input todos_order_by {
+  created_at: order_by
+  id: order_by
+  is_completed: order_by
+  is_public: order_by
+  owner: users_order_by
+  owner_id: order_by
+  title: order_by
+}
+
+# primary key columns input for table: "todos"
+input todos_pk_columns_input {
+  id: uuid!
+}
+
+# select columns of table "todos"
+enum todos_select_column {
+  # column name
+  created_at
+
+  # column name
+  id
+
+  # column name
+  is_completed
+
+  # column name
+  is_public
+
+  # column name
+  owner_id
+
+  # column name
+  title
+}
+
+# input type for updating data in table "todos"
+input todos_set_input {
+  created_at: timestamptz
+  id: uuid
+  is_completed: Boolean
+  is_public: Boolean
+  owner_id: uuid
+  title: String
+}
+
+# update columns of table "todos"
+enum todos_update_column {
+  # column name
+  created_at
+
+  # column name
+  id
+
+  # column name
+  is_completed
+
+  # column name
+  is_public
+
+  # column name
+  owner_id
+
+  # column name
+  title
+}
+
+# columns and relationships of "users"
+type users {
+  created_at: timestamptz!
+  id: uuid!
+  last_seen: timestamptz
+  name: String
+
+  # An array relationship
+  todos(
+    # distinct select on columns
+    distinct_on: [todos_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [todos_order_by!]
+
+    # filter the rows returned
+    where: todos_bool_exp
+  ): [todos!]!
+
+  # An aggregated array relationship
+  todos_aggregate(
+    # distinct select on columns
+    distinct_on: [todos_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [todos_order_by!]
+
+    # filter the rows returned
+    where: todos_bool_exp
+  ): todos_aggregate!
+}
+
+# aggregated selection of "users"
+type users_aggregate {
+  aggregate: users_aggregate_fields
+  nodes: [users!]!
+}
+
+# aggregate fields of "users"
+type users_aggregate_fields {
+  count(columns: [users_select_column!], distinct: Boolean): Int
+  max: users_max_fields
+  min: users_min_fields
+}
+
+# order by aggregate values of table "users"
+input users_aggregate_order_by {
+  count: order_by
+  max: users_max_order_by
+  min: users_min_order_by
+}
+
+# input type for inserting array relation for remote table "users"
+input users_arr_rel_insert_input {
+  data: [users_insert_input!]!
+  on_conflict: users_on_conflict
+}
+
+# Boolean expression to filter rows from the table "users". All fields are combined with a logical 'AND'.
+input users_bool_exp {
+  _and: [users_bool_exp]
+  _not: users_bool_exp
+  _or: [users_bool_exp]
+  created_at: timestamptz_comparison_exp
+  id: uuid_comparison_exp
+  last_seen: timestamptz_comparison_exp
+  name: String_comparison_exp
+  todos: todos_bool_exp
+}
+
+# unique or primary key constraints on table "users"
+enum users_constraint {
+  # unique or primary key constraint
+  users_pkey
+}
+
+# input type for inserting data into table "users"
+input users_insert_input {
+  created_at: timestamptz
+  id: uuid
+  last_seen: timestamptz
+  name: String
+  todos: todos_arr_rel_insert_input
+}
+
+# aggregate max on columns
+type users_max_fields {
+  created_at: timestamptz
+  id: uuid
+  last_seen: timestamptz
+  name: String
+}
+
+# order by max() on columns of table "users"
+input users_max_order_by {
+  created_at: order_by
+  id: order_by
+  last_seen: order_by
+  name: order_by
+}
+
+# aggregate min on columns
+type users_min_fields {
+  created_at: timestamptz
+  id: uuid
+  last_seen: timestamptz
+  name: String
+}
+
+# order by min() on columns of table "users"
+input users_min_order_by {
+  created_at: order_by
+  id: order_by
+  last_seen: order_by
+  name: order_by
+}
+
+# response of any mutation on the table "users"
+type users_mutation_response {
+  # number of affected rows by the mutation
+  affected_rows: Int!
+
+  # data of the affected rows by the mutation
+  returning: [users!]!
+}
+
+# input type for inserting object relation for remote table "users"
+input users_obj_rel_insert_input {
+  data: users_insert_input!
+  on_conflict: users_on_conflict
+}
+
+# on conflict condition type for table "users"
+input users_on_conflict {
+  constraint: users_constraint!
+  update_columns: [users_update_column!]!
+  where: users_bool_exp
+}
+
+# ordering options when selecting data from "users"
+input users_order_by {
+  created_at: order_by
+  id: order_by
+  last_seen: order_by
+  name: order_by
+  todos_aggregate: todos_aggregate_order_by
+}
+
+# primary key columns input for table: "users"
+input users_pk_columns_input {
+  id: uuid!
+}
+
+# select columns of table "users"
+enum users_select_column {
+  # column name
+  created_at
+
+  # column name
+  id
+
+  # column name
+  last_seen
+
+  # column name
+  name
+}
+
+# input type for updating data in table "users"
+input users_set_input {
+  created_at: timestamptz
+  id: uuid
+  last_seen: timestamptz
+  name: String
+}
+
+# update columns of table "users"
+enum users_update_column {
+  # column name
+  created_at
+
+  # column name
+  id
+
+  # column name
+  last_seen
+
+  # column name
+  name
+}
+
+scalar uuid
+
+# expression to compare columns of type uuid. All fields are combined with logical 'AND'.
+input uuid_comparison_exp {
+  _eq: uuid
+  _gt: uuid
+  _gte: uuid
+  _in: [uuid!]
+  _is_null: Boolean
+  _lt: uuid
+  _lte: uuid
+  _neq: uuid
+  _nin: [uuid!]
+}
+
